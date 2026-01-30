@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Participa DF Mobile - Registre sua manifestação na Ouvidoria do DF">
+    <meta name="theme-color" content="#003399">
+    <title>Ouvidoria - Participa DF</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://www.participa.df.gov.br/assets/images/favicon.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Rawline:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+</head>
+<body>
+
+    <!-- Acessibilidade -->
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Pular para o conteúdo principal</a>
+    <div id="fab-drag" class="accessibility-fab dropdown">
+    <button class="btn btn-primary rounded-circle shadow-lg" type="button" id="btn-access-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Opções de Acessibilidade">
+        <i class="bi bi-universal-access fs-4"></i>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end shadow p-2" style="min-width: 200px;">
+        <li><h6 class="dropdown-header">Acessibilidade</h6></li>
+        
+        <li><hr class="dropdown-divider"></li>
+        
+        <!-- Opções existentes -->
+        <li><button class="dropdown-item d-flex justify-content-between" onclick="toggleContrast()"><i class="bi bi-circle-half"></i> Alto Contraste</button></li>
+        <li><button class="dropdown-item d-flex justify-content-between" onclick="changeFontSize(1)"><i class="bi bi-zoom-in"></i> Aumentar Texto</button></li>
+        <li><button class="dropdown-item d-flex justify-content-between" onclick="changeFontSize(-1)"><i class="bi bi-zoom-out"></i> Diminuir Texto</button></li>
+        <li><button class="dropdown-item d-flex justify-content-between" onclick="toggleDyslexia()"><i class="bi bi-type"></i> Fonte Dislexia</button></li>
+    </ul>
+</div>
+
+    <!-- Header -->
+    <!-- Header -->
+    <header class="app-header sticky-top">
+        <div class="container py-2 d-flex align-items-center justify-content-between">
+            <a href="#" onclick="location.reload()" class="d-flex align-items-center" aria-label="Ir para página inicial do Participa DF">
+                <img src="https://www.participa.df.gov.br/assets/images/participadf-branca.svg" alt="Logotipo Participa DF" style="height: 32px; width: auto;">
+            </a>
+            
+            <div class="d-flex align-items-center gap-3">
+                <!-- Botão Dark Mode -->
+                <button class="btn btn-sm text-white" id="btn-theme-toggle" onclick="toggleDarkMode()">
+                    <i class="bi bi-moon-stars-fill" id="theme-icon"></i>
+                </button>
+
+                <!-- Botão Ajuda -->
+                <button class="btn btn-sm text-white border-white border-opacity-25 btn-open-orientacoes rounded-pill px-3">
+                    <i class="bi bi-question-circle"></i> <span class="d-none d-sm-inline ms-1">Ajuda</span>
+                </button>
+
+                <div id="offline-indicator" class="badge bg-danger d-none animate__animated animate__fadeIn">
+                    <i class="bi bi-wifi-off"></i> Offline
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="container py-4 pb-5 mb-5" style="max-width: 600px;">
+        
+        <!-- PROGRESS BAR -->
+        <div id="wizard-progress" class="mb-4 d-none" aria-hidden="true">
+            <div class="progress rounded-pill bg-secondary-subtle" style="height: 8px;">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: 33%"></div>
+            </div>
+            <div class="d-flex justify-content-between mt-2 small fw-bold text-secondary text-uppercase" style="font-size: 0.7rem;">
+                <span>Identificação</span>
+                <span>Relato</span>
+                <span>Evidências</span>
+            </div>
+        </div>
+
+        <!-- TELA 1: LOGIN -->
+        <section id="step-login" class="step-section animate__animated animate__fadeIn">
+            <div class="text-center mb-4 mt-3">
+                <i class="bi bi-chat-left-quote text-primary display-1"></i>
+                <h1 class="h3 fw-bold mt-3 text-primary">Bem-vindo à Ouvidoria</h1>
+                <p class="text-muted">Exerça sua cidadania. Escolha como deseja se identificar.</p>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button id="btn-govbr" class="btn btn-govbr py-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                    <img src="https://raw.githubusercontent.com/Entria/govbr-login/master/src/assets/govbr-logo-light.png" alt="" style="height: 20px;">
+                    <span class="fw-bold">Entrar com gov.br</span>
+                </button>
+                
+                <a href="https://www.participa.df.gov.br/pages/auth" class="btn btn-outline-secondary py-2 border-0 small text-muted">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Já tenho cadastro (Sistema Legado)
+                </a>
+                
+                <div class="d-flex align-items-center my-3">
+                    <div class="flex-grow-1 border-bottom"></div>
+                    <span class="mx-3 text-muted small">OU</span>
+                    <div class="flex-grow-1 border-bottom"></div>
+                </div>
+
+                <button id="btn-anonimo" class="btn btn-outline-primary py-3 fw-bold border-2">
+                    <i class="bi bi-incognito me-2"></i> Manifestação Anônima
+                </button>
+            </div>
+            
+            <div class="alert alert-light mt-3 d-flex gap-3 align-items-start shadow-sm border-0">
+                <i class="bi bi-shield-check text-success fs-4"></i>
+                <div class="small text-muted">
+                    Seus dados estão protegidos pela <strong>LGPD</strong>. O sigilo da sua identidade é garantido por lei.
+                </div>
+            </div>
+        </section>
+
+        <!-- FORMULÁRIO PRINCIPAL -->
+        <form id="main-form" novalidate class="d-none">
+            
+            <!-- STEP 2: RELATO -->
+            <section id="step-relato" class="step-section animate__animated animate__fadeIn d-none" tabindex="-1">
+                <h2 class="h5 fw-bold mb-4 text-primary border-start border-4 border-warning ps-2">Detalhes da Ocorrência</h2>
+                
+                <!-- Botão de Ajuda Contextual -->
+                <div class="d-flex justify-content-end mb-2">
+                    <button type="button" class="btn btn-sm btn-outline-info rounded-pill btn-open-orientacoes">
+                        <i class="bi bi-info-circle-fill me-1"></i> Precisa de ajuda com o tipo?
+                    </button>
+                </div>
+
+                <div class="card shadow-sm border-0 mb-3">
+                    <div class="card-body">
+                        <label for="tipo" class="form-label fw-bold small text-muted text-uppercase">Tipo de Manifestação <span class="text-danger">*</span></label>
+                        <select class="form-select form-select-lg bg-light border-0" id="tipo" required>
+                            <option value="" selected disabled>Toque para selecionar...</option>
+                            <option value="Denúncia">🚨 Denúncia</option>
+                            <option value="Reclamação">😤 Reclamação</option>
+                            <option value="Solicitação">🛠️ Solicitação</option>
+                            <option value="Elogio">👏 Elogio</option>
+                            <option value="Sugestão">💡 Sugestão</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0 mb-3">
+                    <div class="card-body">
+                        <label class="form-label fw-bold small text-muted text-uppercase">Onde aconteceu?</label>
+                        <div id="geo-wrapper" class="bg-light rounded p-3 text-center border border-dashed">
+                            <button type="button" id="btn-geo" class="btn btn-sm btn-outline-primary rounded-pill mb-2">
+                                <i class="bi bi-crosshair"></i> Usar minha localização atual
+                            </button>
+                            <div id="mapa-preview" class="rounded mt-2 shadow-sm d-none" style="height: 180px; z-index: 1;"></div>
+                            <small id="geo-text" class="d-block text-muted mt-2 fst-italic" style="font-size: 0.75rem;">Localização não definida</small>
+                            <input type="hidden" id="lat"><input type="hidden" id="lng">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <label for="texto" class="form-label fw-bold small text-muted text-uppercase">Descrição do Fato <span class="text-danger">*</span></label>
+                        <textarea class="form-control bg-light border-0" id="texto" rows="6" required placeholder="Descreva o que aconteceu, quando e quem estava envolvido..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 3: EVIDÊNCIAS -->
+            <section id="step-anexos" class="step-section d-none animate__animated animate__fadeIn" tabindex="-1">
+                <h2 class="h5 fw-bold mb-4 text-primary border-start border-4 border-warning ps-2">Anexar Evidências</h2>
+                <div class="alert alert-info py-2 small"><i class="bi bi-info-circle me-1"></i> Máximo 3 arquivos (5MB cada).</div>
+
+                <div class="row g-2 mb-4">
+                    <div class="col-6">
+                        <input type="file" id="camera" accept="image/*" capture="environment" class="d-none media-input">
+                        <label for="camera" class="upload-card shadow-sm" role="button" tabindex="0">
+                            <div class="icon-circle bg-primary-subtle text-primary mb-2">
+                                <i class="bi bi-camera-fill"></i>
+                            </div>
+                            <span class="fw-bold small">Tirar Foto</span>
+                        </label>
+                    </div>
+                    <div class="col-6">
+                        <input type="file" id="video" accept="video/*" capture="environment" class="d-none media-input">
+                        <label for="video" class="upload-card shadow-sm" role="button" tabindex="0">
+                            <div class="icon-circle bg-danger-subtle text-danger mb-2">
+                                <i class="bi bi-camera-reels-fill"></i>
+                            </div>
+                            <span class="fw-bold small">Gravar Vídeo</span>
+                        </label>
+                    </div>
+                    <div class="col-12">
+                        <div id="audio-start-card" class="upload-card shadow-sm flex-row align-items-center justify-content-center gap-3 py-3" role="button" tabindex="0">
+                            <div class="icon-circle bg-success-subtle text-success">
+                                <i class="bi bi-mic-fill"></i>
+                            </div>
+                            <span class="fw-bold small">Gravar Relato de Voz</span>
+                        </div>
+                        <div id="audio-recording-ui" class="card shadow-sm border-danger d-none animate__animated animate__fadeIn">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center py-4">
+                                <div class="position-relative d-flex align-items-center justify-content-center mb-3">
+                                    <div class="spinner-grow text-danger" role="status" style="width: 3rem; height: 3rem; opacity: 0.5;"></div>
+                                    <i class="bi bi-mic-fill text-danger position-absolute fs-4"></i>
+                                </div>
+                                <h6 class="fw-bold text-danger mb-1">Gravando...</h6>
+                                <div id="recording-timer" class="font-monospace fs-5 mb-3 text-dark">00:00</div>
+                                <button type="button" id="btn-stop-record" class="btn btn-danger rounded-pill px-4 shadow-sm hover-scale">
+                                    <i class="bi bi-stop-circle-fill me-2"></i> Parar Gravação
+                                </button>
+                            </div>
+                        </div>
+                        <div id="audio-success-ui" class="alert alert-success d-none align-items-center justify-content-between mt-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-file-earmark-music fs-4"></i>
+                                <small>Relato de Voz Gravado</small>
+                            </div>
+                            <button type="button" id="btn-delete-audio" class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="file-preview-list" class="d-grid gap-2"></div>
+            </section>
+
+             <!-- STEP 4: REVISÃO -->
+            <section id="step-revisao" class="step-section d-none animate__animated animate__fadeIn" tabindex="-1">
+                <h2 class="h5 fw-bold mb-4 text-primary border-start border-4 border-warning ps-2">Revisão dos Dados</h2>
+                
+                <div class="card bg-light border-0 mb-3">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-uppercase small text-muted mb-1">Identificação</h6>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-person-circle text-primary"></i>
+                            <span id="review-nome" class="fw-bold">Anônimo</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-light border-0 mb-3">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-uppercase small text-muted mb-1">Ocorrência</h6>
+                        <span id="review-tipo" class="badge bg-warning text-dark mb-2">---</span>
+                        <p id="review-texto" class="small fst-italic mb-0 text-muted">---</p>
+                    </div>
+                </div>
+                <div class="card bg-light border-0 mb-3">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-uppercase small text-muted mb-1">Localização</h6>
+                        <div class="d-flex align-items-center gap-2 text-success">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <span id="review-geo" class="small fw-bold">Não informada</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-light border-0">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-uppercase small text-muted mb-1">Anexos</h6>
+                        <span id="review-anexos" class="small text-muted">Nenhum arquivo anexado</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BARRA DE NAVEGAÇÃO INFERIOR -->
+            <div class="fixed-bottom bg-white border-top p-3 shadow-lg nav-bar-blur">
+                <div class="container d-flex gap-2 justify-content-between" style="max-width: 600px;">
+                    <button type="button" id="btn-prev" class="btn btn-outline-secondary px-4 d-none" aria-label="Voltar etapa">
+                        <i class="bi bi-arrow-left"></i>
+                    </button>
+                    
+                    <button type="button" id="btn-next" class="btn btn-primary flex-grow-1 fw-bold shadow-sm rounded-pill">
+                        Continuar <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+
+                    <button type="submit" id="btn-submit" class="btn btn-success flex-grow-1 fw-bold shadow-sm rounded-pill d-none">
+                        ENVIAR MANIFESTAÇÃO <i class="bi bi-send-fill ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- NOVO: TELA DE ORIENTAÇÕES (Página inteira, não popup) -->
+        <!-- TELA DE ORIENTAÇÕES (Redesenhada e Responsiva) -->
+<section id="step-orientacoes" class="step-section animate__animated animate__fadeIn d-none bg-body">
+    
+    <!-- Hero Header (Topo Colorido) -->
+    <div class="bg-primary text-white py-5 px-4 mb-5 shadow-sm text-center">
+        <div class="container" style="max-width: 800px;">
+            <button type="button" class="btn btn-sm btn-outline-light border-0 mb-3 btn-close-orientacoes rounded-pill px-3">
+                <i class="bi bi-arrow-left me-2"></i> Voltar
+            </button>
+            <h2 class="display-6 fw-bold mb-2">Como podemos te ajudar hoje?</h2>
+            <p class="lead opacity-90 mb-0">Entenda como funciona a Ouvidoria para garantir que sua voz tenha o impacto que merece.</p>
+        </div>
+    </div>
+
+    <!-- Container Principal (Limitado para leitura confortável no Desktop) -->
+    <div class="container pb-5" style="max-width: 900px;">
+        
+        <!-- SEÇÃO 1: ESCOLHA SEU CAMINHO -->
+        <div class="row g-4 mb-5 align-items-stretch">
+            <div class="col-12 text-center mb-1">
+                <h5 class="fw-bold text-primary ls-1 text-uppercase small">1. Escolha como participar</h5>
+            </div>
+            
+            <!-- Card Identificado -->
+            <div class="col-md-6">
+                <div class="card guide-card h-100 border-0 shadow-sm bg-body-tertiary hover-lift">
+                    <div class="card-body p-4 text-center">
+                        <div class="guide-icon-box bg-primary text-white mx-auto shadow-sm mb-3">
+                            <i class="bi bi-person-check-fill fs-3"></i>
+                        </div>
+                        <h4 class="h5 fw-bold text-primary">Quero me Identificar</h4>
+                        <p class="text-muted small mb-3">
+                            A opção recomendada. Você recebe o número do protocolo por e-mail e pode <strong>acompanhar a resposta</strong> do órgão.
+                        </p>
+                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3">Ideal para acompanhamento</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Anônimo -->
+            <div class="col-md-6">
+                <div class="card guide-card h-100 border-0 shadow-sm bg-body-tertiary hover-lift">
+                    <div class="card-body p-4 text-center">
+                        <div class="guide-icon-box bg-secondary text-white mx-auto shadow-sm mb-3">
+                            <i class="bi bi-incognito fs-3"></i>
+                        </div>
+                        <h4 class="h5 fw-bold text-secondary">Prefiro o Anonimato</h4>
+                        <p class="text-muted small mb-3">
+                            Respeitamos sua privacidade. Seus dados não aparecem, mas atenção: você <strong>não receberá resposta</strong> sobre o andamento.
+                        </p>
+                        <span class="badge bg-secondary-subtle text-secondary rounded-pill px-3">Sigilo total garantido</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 2: SEGURANÇA E PRIVACIDADE -->
+        <div class="card security-banner border-0 rounded-4 mb-5 shadow overflow-hidden">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-4 bg-success-subtle text-success p-4 d-flex flex-column align-items-center justify-content-center text-center">
+                    <i class="bi bi-shield-lock-fill display-1 mb-2"></i>
+                    <h5 class="fw-bold mb-0">Você está seguro</h5>
+                </div>
+                <div class="col-md-8 p-4">
+                    <h5 class="fw-bold text-success mb-3">Proteção Legal ao Denunciante</h5>
+                    <p class="small text-muted mb-3">
+                        Pode confiar! Suas informações são tratadas com <strong>sigilo absoluto</strong>, conforme a Lei Geral de Proteção de Dados (LGPD) e o Decreto nº 36.462/2015.
+                    </p>
+                    <ul class="list-unstyled small text-secondary mb-0">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Seus dados pessoais nunca são compartilhados no trâmite.</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>O sigilo é obrigatório, inclusive para os servidores públicos.</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Segurança reforçada pelo sistema SIGO-DF.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 3: DICAS E LINKS EXTERNOS -->
+        <div class="row g-4 mb-5">
+            <div class="col-12 text-center mb-1">
+                <h5 class="fw-bold text-primary ls-1 text-uppercase small">2. Antes de escrever</h5>
+            </div>
+
+            <!-- Dica de Preenchimento -->
+            <div class="col-md-6">
+                <div class="card h-100 border-start border-4 border-warning shadow-sm">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-warning-emphasis"><i class="bi bi-lightbulb-fill me-2"></i>Dica de Ouro</h6>
+                        <p class="small text-muted mt-2">
+                            Para sua segurança, <strong>não escreva dados pessoais</strong> (CPF, telefone, endereço) no corpo do texto da reclamação.
+                        </p>
+                        <p class="small text-muted mb-0">
+                            Use os campos específicos do cadastro para isso. O texto do relato pode ser visto por diversas áreas técnicas para resolver o problema.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Link Externo (Fala BR) -->
+            <div class="col-md-6">
+                <div class="card h-100 border-start border-4 border-info shadow-sm">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-info-emphasis"><i class="bi bi-buildings-fill me-2"></i>Governo Federal?</h6>
+                        <p class="small text-muted mt-2">
+                            Assuntos como <strong>INSS</strong>, <strong>Conecta SUS</strong> ou <strong>App Gov.br</strong> não são de competência do GDF.
+                        </p>
+                        <a href="https://falabr.cgu.gov.br/" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-info rounded-pill fw-bold mt-1">
+                            Acessar Fala.BR <i class="bi bi-box-arrow-up-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Regra de Ouro -->
+             <div class="col-12">
+                <div class="alert alert-light border shadow-sm d-flex align-items-center gap-3" role="alert">
+                    <i class="bi bi-1-circle-fill fs-3 text-primary"></i>
+                    <div>
+                        <strong>Um assunto por vez:</strong>
+                        <span class="small text-muted d-block">
+                            Se você precisa pedir "Poda de Árvore" e "Tapa-Buraco", faça dois registros separados. Isso agiliza o atendimento!
+                        </span>
+                    </div>
+                </div>
+             </div>
+        </div>
+
+        <!-- SEÇÃO 4: A JORNADA (Timeline) -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <h5 class="fw-bold text-center text-primary ls-1 text-uppercase small mb-4">3. O passo a passo</h5>
+                
+                <div class="timeline-wrapper">
+                    <div class="timeline-step">
+                        <div class="step-number shadow">1</div>
+                        <div class="step-content bg-body-tertiary p-3 rounded-3 shadow-sm border">
+                            <h6 class="fw-bold text-primary mb-2">Relato Detalhado</h6>
+                            <p class="text-muted small mb-0">
+                                Conte-nos: <strong>O quê? Quando? Onde? Quem?</strong><br>
+                                Quanto mais detalhes você der, mais fácil será para a equipe entender e resolver.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="step-number shadow">2</div>
+                        <div class="step-content bg-body-tertiary p-3 rounded-3 shadow-sm border">
+                            <h6 class="fw-bold text-primary mb-2">Classificação Inteligente</h6>
+                            <p class="text-muted small mb-0">
+                                Nossa assistente virtual, a <strong>IZA</strong>, vai sugerir o assunto principal. Se não concordar, você pode alterar manualmente.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="step-number shadow">3</div>
+                        <div class="step-content bg-body-tertiary p-3 rounded-3 shadow-sm border">
+                            <h6 class="fw-bold text-primary mb-2">Local e Provas</h6>
+                            <p class="text-muted small mb-0">
+                                Use o mapa para marcar o local exato. Anexe fotos ou vídeos (até 25MB). Imagens valem mais que mil palavras!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-step">
+                        <div class="step-number bg-success shadow"><i class="bi bi-check-lg"></i></div>
+                        <div class="step-content bg-success-subtle p-3 rounded-3 shadow-sm border border-success">
+                            <h6 class="fw-bold text-success mb-2">Protocolo Gerado!</h6>
+                            <p class="text-success-emphasis small mb-0">
+                                Tudo pronto. Guarde o número do seu protocolo para acompanhar a solução.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão de Ação Flutuante no Final -->
+        <div class="text-center pb-5">
+            <p class="text-muted mb-3">Tudo certo? Vamos começar?</p>
+            <button class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-lg hover-scale btn-close-orientacoes fw-bold">
+                <i class="bi bi-pencil-square me-2"></i> Registrar Manifestação
+            </button>
+        </div>
+
+    </div>
+</section>
+
+        <!-- TELA FINAL: PROTOCOLO -->
+        <section id="step-sucesso" class="d-none animate__animated animate__zoomIn text-center pt-5">
+            <div class="mb-4 position-relative">
+                <div class="blob mx-auto bg-success-subtle position-absolute top-50 start-50 translate-middle"></div>
+                <i class="bi bi-check-circle-fill text-success display-1 position-relative"></i>
+            </div>
+            
+            <h2 class="h3 fw-bold text-success mb-2">Manifestação Enviada!</h2>
+            <p class="text-muted mb-4 px-3">Sua voz ajuda a construir um Distrito Federal melhor.</p>
+
+            <div class="card border-0 shadow bg-light mx-3 mb-4 ticket-card">
+                <div class="card-body position-relative overflow-hidden">
+                    <div class="position-absolute top-0 start-0 w-100 h-1 bg-gradient-primary"></div>
+                    <small class="text-uppercase fw-bold text-muted tracking-wide">Protocolo Digital</small>
+                    <div class="display-6 fw-bold text-primary mt-1 tracking-wider" id="protocolo-final">...</div>
+                    <hr class="border-dashed my-3">
+                    <div class="row text-start small">
+                        <div class="col-6">
+                            <span class="text-muted d-block">Data</span>
+                            <strong id="data-final">-</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-muted d-block">Status</span>
+                            <strong class="text-warning">Em Análise</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 px-3">
+                <button onclick="compartilharProtocolo()" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-share"></i> Salvar Comprovante
+                </button>
+                <button onclick="location.reload()" class="btn btn-link text-muted text-decoration-none">
+                    Voltar ao Início
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+<!-- BOTÃO FLUTUANTE DA IZA (CHATBOT) -->
+<div id="iza-fab-container" class="position-fixed bottom-0 end-0 mb-4 me-3" style="z-index: 1060; bottom: 85px !important;">
+    <button id="btn-open-chat" class="btn btn-light shadow-lg rounded-pill py-2 px-3 d-flex align-items-center gap-2 border border-primary animate__animated animate__pulse animate__infinite">
+        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+            <i class="bi bi-robot"></i>
+        </div>
+        <div class="d-flex flex-column align-items-start lh-1">
+            <span class="fw-bold text-primary small">Falar com IZA</span>
+            <span style="font-size: 0.6rem;" class="text-muted">Assistente Virtual</span>
+        </div>
+    </button>
+</div>
+
+<!-- INTERFACE DO CHAT (MODAL/OFFCANVAS CUSTOMIZADO) -->
+<div id="iza-chat-window" class="fixed-bottom bg-body shadow-lg d-none rounded-top-4" style="z-index: 1070; height: 85vh; max-width: 600px; margin: 0 auto; border-top: 4px solid var(--primary-color);">
+    
+    <!-- Header do Chat -->
+    <div class="d-flex align-items-center justify-content-between p-3 border-bottom bg-light rounded-top-4">
+        <div class="d-flex align-items-center gap-2">
+            <div class="position-relative">
+                <img src="https://www.participa.df.gov.br/assets/images/iza-1.PNG" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4712/4712035.png'" class="rounded-circle border" style="width: 40px; height: 40px; object-fit: cover;">
+                <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+            </div>
+            <div>
+                <h6 class="mb-0 fw-bold text-primary">IZA - Ouvidoria</h6>
+                <small class="text-muted status-typing d-none">digitando...</small>
+                <small class="text-muted status-online">Online agora</small>
+            </div>
+        </div>
+        <button id="btn-close-chat" class="btn btn-sm btn-close"></button>
+    </div>
+
+    <!-- Área de Mensagens -->
+    <div id="chat-messages" class="p-3 overflow-y-auto bg-body-tertiary" style="height: calc(100% - 130px);">
+        <!-- Mensagens serão inseridas aqui via JS -->
+    </div>
+
+    <!-- Área de Input -->
+    <div class="p-2 border-top bg-body position-absolute bottom-0 w-100">
+        <!-- Botões de Ação Rápida (Mídia) -->
+        <div class="d-flex gap-2 mb-2 px-2 overflow-x-auto pb-1" id="chat-media-actions">
+            <button class="btn btn-sm btn-outline-secondary rounded-pill text-nowrap" onclick="chatTrigger('geo')"><i class="bi bi-geo-alt-fill text-danger"></i> Local</button>
+            <button class="btn btn-sm btn-outline-secondary rounded-pill text-nowrap" onclick="chatTrigger('foto')"><i class="bi bi-camera-fill text-primary"></i> Foto</button>
+            <button class="btn btn-sm btn-outline-secondary rounded-pill text-nowrap" onclick="chatTrigger('mic')"><i class="bi bi-mic-fill text-success"></i> Áudio</button>
+        </div>
+        
+        <form id="chat-form" class="d-flex gap-2 align-items-center">
+            <input type="text" id="chat-input" class="form-control rounded-pill bg-light" placeholder="Digite sua mensagem..." autocomplete="off">
+            <button type="submit" class="btn btn-primary rounded-circle shadow-sm" style="width: 45px; height: 45px;">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+    <!-- JS Libs -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.protocol === 'http:')) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log('Service Worker Registrado!'))
+                .catch(err => console.error('Erro SW:', err));
+        }
+    </script>
+    
+    <!-- Widget VLibras -->
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>new window.VLibras.Widget('https://vlibras.gov.br/app');</script>
+
+    <!-- Toast de Instalação -->
+    <div id="install-toast" class="toast position-fixed bottom-0 start-50 translate-middle-x mb-5 align-items-center text-white bg-primary border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 1050; display: none;">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center gap-3">
+            <i class="bi bi-phone fs-4"></i>
+            <div>
+                <strong>Instalar App</strong><br>
+                <small>Acesse offline e mais rápido.</small>
+            </div>
+        </div>
+        <button type="button" id="btn-install-app" class="btn btn-light btn-sm me-3 my-auto fw-bold text-primary">INSTALAR</button>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="document.getElementById('install-toast').style.display='none'"></button>
+      </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "Participa DF - Ouvidoria",
+  "short_name": "Participa DF",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#003399",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://www.participa.df.gov.br/assets/images/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://www.participa.df.gov.br/assets/images/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
