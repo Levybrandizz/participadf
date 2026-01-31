@@ -1,4 +1,4 @@
-#  Participa DF Mobile - Ouvidoria Digital
+#  Participa DF - Ouvidoria Digital
 
 ![Badge: Concluído](https://img.shields.io/static/v1?label=STATUS&message=CONCLUÍDO&color=green&style=for-the-badge)
 ![Badge: PWA](https://img.shields.io/static/v1?label=PLATAFORMA&message=PWA%20MOBILE&color=blue&style=for-the-badge)
