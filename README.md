@@ -48,6 +48,24 @@ Modernizar o acesso à Ouvidoria do Distrito Federal, oferecendo uma solução w
 *   Animate.css
 *   Express.js
 
+## 📱 Galeria da Solução
+
+Confira a interface do projeto em funcionamento:
+
+| **🏠 Home & Login** | **📝 Seleção de Tipo** | **📍 Geolocalização & Anexos** |
+|:---:|:---:|:---:|
+| <img src="./img/1.png" width="250" alt="Tela Inicial"> | <img src="https://prnt.sc/OX6IPGJMx7Fq/direct" width="250" alt="Seleção de Tipo"> | <img src="https://prnt.sc/VhJ-0b2imoMU/direct" width="250" alt="Geolocalização"> |
+| *Acesso via Gov.br ou Anônimo* | *Interface intuitiva para categorias* | *Mapa interativo e Uploads* |
+
+| **🤖 Chatbot IZA** | **🎫 Protocolo Gerado** | **♿ Menu de Acessibilidade** |
+|:---:|:---:|:---:|
+| <img src="https://prnt.sc/rRl-1O1FtT4s/direct" width="250" alt="Chatbot IZA"> | <img src="https://prnt.sc/t9pjhoJuELeQ/direct" width="250" alt="Sucesso"> | <img src="https://prnt.sc/cDw_DZ-VKuMs/direct" width="250" alt="Acessibilidade"> |
+| *IA para triagem automática* | *Comprovante digital imediato* | *Alto contraste e Fontes* |
+
+> *Nota: As imagens acima demonstram a responsividade e o design mobile-first da aplicação.*
+
+---
+
 ## 📹 Demonstração
 
 Confira o vídeo da solução em ação:
@@ -102,7 +120,7 @@ Você pode executar o projeto de duas formas:
 *   Conformidade com WCAG 2.1 AA.
 
 ## 🗂 Estrutura
-## 👨‍💻 #Autor
+## 👨‍💻 Autor
 
 Levy Brandizzi
 
