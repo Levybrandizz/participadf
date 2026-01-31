@@ -1,53 +1,116 @@
-# 🏛️ Participa DF - Solução de Ouvidoria (PWA)
+#  Participa DF Mobile - Ouvidoria Digital
 
-> **Desafio:** 1º Hackathon em Controle Social - Participa DF  
-> **Categoria:** Ouvidoria  
-> **Status:** 🚀 Versão Final (Candidate Release)
+![Badge: Concluído](https://img.shields.io/static/v1?label=STATUS&message=CONCLUÍDO&color=green&style=for-the-badge)
+![Badge: PWA](https://img.shields.io/static/v1?label=PLATAFORMA&message=PWA%20MOBILE&color=blue&style=for-the-badge)
+![Badge: Acessibilidade WCAG 2.1 AA](https://img.shields.io/static/v1?label=WCAG&message=2.1%20AA&color=orange&style=for-the-badge)
 
----
-
-## 📺 Demonstração da Solução
-
-**[CLIQUE AQUI PARA ASSISTIR AO VÍDEO DE DEMONSTRAÇÃO (YouTube)]**  
-*(Cole aqui o link do seu vídeo "Não Listado" no YouTube, conforme Item 6.5.2-V do Edital. O vídeo deve ter até 7 minutos)*
+> Solução individual para o Hackathon em Controle Social do DF. Um PWA acessível, resiliente e com chatbot integrado.
 
 ---
 
-## 🎯 Objetivo e Visão Geral
+## 📑 Sumário
 
-Esta solução é um **Progressive Web App (PWA)** desenvolvido para democratizar o acesso à Ouvidoria do Distrito Federal. Focada na experiência do usuário (UX/UI) e na inclusão digital, a aplicação resolve os principais atritos do sistema atual: complexidade no cadastro, dependência de conexão estável e falta de acessibilidade.
-
-### Principais Diferenciais:
-1.  **🤖 Integração com IZA (IA):** Um chatbot simulado que guia o cidadão e sugere automaticamente a classificação da manifestação (Denúncia, Reclamação, etc) com base no relato.
-2.  **📴 Modo Offline (Offline-first):** Graças aos Service Workers, o cidadão pode redigir sua manifestação sem internet. O app salva o rascunho localmente e permite o envio assim que a conexão retorna.
-3.  **♿ Acessibilidade Universal:** Menu dedicado (WCAG 2.1 AA) com alto contraste, fonte para dislexia, zoom e integração nativa com **VLibras**.
-4.  **🎙️ Multicanalidade:** Suporte nativo para gravação de áudio e captura de vídeo direto pelo navegador, sem necessidade de plugins.
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-O projeto foi construído utilizando tecnologias web padrão (Vanilla JS) para garantir leveza, compatibilidade e facilidade de manutenção pelo GDF, sem dependência de frameworks pesados.
-
-*   **Frontend:** HTML5, CSS3 (Variáveis CSS para temas), JavaScript (ES6+).
-*   **Framework CSS:** Bootstrap 5.3 (Grid e Componentes).
-*   **Mapas:** Leaflet.js (OpenStreetMap) para georreferenciação.
-*   **Onboarding:** Driver.js para tutorial interativo.
-*   **Armazenamento Local:** LocalStorage e Cache API (Service Workers).
-*   **Ícones:** Bootstrap Icons.
+- [🎯 Objetivo](#objetivo)
+- [💡 Funcionalidades](#funcionalidades)
+- [⚙️ Tecnologias](#tecnologias)
+- [📹 Demonstração](#demonstracao)
+- [⚡️ Primeiros Passos](#primeiros-passos)
+  - [Pré-requisitos](#pre-requisitos)
+  - [Instalação](#instalacao)
+  - [Execução](#execucao)
+    - [Opção A: Servidor Node.js (Recomendado)](#opcao-a-servidor-nodejs-recomendado)
+    - [Opção B: Abertura Direta no Navegador](#opcao-b-abertura-direta-no-navegador)
+- [♿ Acessibilidade](#acessibilidade)
+- [🗂 Estrutura](#estrutura)
+- [👨‍💻 Autor](#autor)
 
 ---
 
-## 📂 Estrutura de Arquivos
+## 🎯 Objetivo
 
-A organização do código prioriza a clareza e separação de responsabilidades:
+Modernizar o acesso à Ouvidoria do Distrito Federal, oferecendo uma solução web acessível, responsiva e disponível mesmo offline.
 
-```text
-/
-├── index.html          # Estrutura principal (Single Page Application simulada)
-├── style.css           # Estilos customizados, temas (Dark/Light) e animações
-├── app.js              # Lógica principal, controle de estado, IZA Chatbot e API de Mídia
-├── sw.js               # Service Worker para funcionalidade Offline e PWA
-├── manifest.json       # Configuração para instalação (Adicionar à Tela Inicial)
-├── assets/             # Imagens e recursos estáticos
-└── README.md           # Documentação do projeto
+## 💡 Funcionalidades
+
+*   **Multicanalidade:** Envio de manifestações por texto, áudio, vídeo e foto.
+*   **Geolocalização:** Marcação de ocorrências no mapa.
+*   **Chatbot IZA:** Assistente virtual para auxiliar no registro.
+*   **Resiliência:** Operação offline e salvamento automático de rascunhos.
+*   **Acessibilidade:** Conformidade com WCAG 2.1 AA e VLibras.
+
+## ⚙️ Tecnologias
+
+*   HTML5, CSS3, JavaScript (ES6+)
+*   Bootstrap 5.3
+*   Leaflet.js
+*   SweetAlert2
+*   Driver.js
+*   Animate.css
+*   Express.js
+
+## 📹 Demonstração
+
+Confira o vídeo da solução em ação:
+
+[![Vídeo Demo](https://img.youtube.com/vi/[link aqui]/maxresdefault.jpg)](https://youtu.be/link aq)
+> **Link:** [https://youtu.be/link d video aq](https://youtu.be/link do video aq)
+
+---
+
+## ⚡️ Primeiros Passos
+
+### Pré-requisitos
+
+*   Editor de código (VS Code, Sublime Text, etc.)
+*   Navegador web moderno (Chrome, Firefox, etc.)
+*   Node.js e npm (opcional, para execução via servidor)
+
+### Instalação
+
+1.  Clone o repositório:
+    ```bash
+    git clone https://github.com/Levybrandizz/PwaDF.git
+    cd PwaDF
+    ```
+2.  (Opcional) Se optar por executar via servidor Node.js, instale as dependências:
+    ```bash
+    npm install
+    ```
+
+### Execução
+
+Você pode executar o projeto de duas formas:
+
+#### Opção A: Servidor Node.js (Recomendado)
+
+1.  Após instalar as dependências, inicie o servidor:
+    ```bash
+    npm start
+    ```
+2.  Acesse `http://localhost:3000` no navegador.
+
+#### Opção B: Abertura Direta no Navegador
+
+1.  Navegue até a pasta do projeto no seu sistema de arquivos.
+2.  Abra o arquivo `index.html` diretamente no navegador (dê um duplo clique nele).
+3.  **Observação:** Algumas funcionalidades (como o Service Worker) podem ser restritas ao executar desta forma.
+
+## ♿ Acessibilidade
+
+*   Menu de acessibilidade com opções de alto contraste, fonte para dislexia e ajuste de tamanho.
+*   VLibras para tradução automática para LIBRAS.
+*   Conformidade com WCAG 2.1 AA.
+
+## 🗂 Estrutura
+## 👨‍💻 Autor
+
+Levy Brandizzi
+
+*   GitHub: [https://github.com/Levybrandizz](https://github.com/Levybrandizz)
+
+
+---
+
+<p align="center">
+  Feito de ❤️
+</p>
