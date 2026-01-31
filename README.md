@@ -102,7 +102,7 @@ Você pode executar o projeto de duas formas:
 *   Conformidade com WCAG 2.1 AA.
 
 ## 🗂 Estrutura
-## 👨‍💻 Autor
+## 👨‍💻 #Autor
 
 Levy Brandizzi
 
