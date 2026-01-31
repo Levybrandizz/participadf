@@ -48,23 +48,24 @@ Modernizar o acesso à Ouvidoria do Distrito Federal, oferecendo uma solução w
 *   Animate.css
 *   Express.js
 
-## 📱 Galeria da Solução
+<div align="center">
 
-Confira a interface do projeto em funcionamento:
-
-| **🏠 Home & Login** | **📝 Seleção de Tipo** | **📍 Geolocalização & Anexos** |
+| **🏠 Home & Login** | **🤖 Chatbot IZA** | **📍 Print 3** |
 |:---:|:---:|:---:|
-| <img src="./img/1.png" width="250" alt="Tela Inicial"> | <img src="https://prnt.sc/OX6IPGJMx7Fq/direct" width="250" alt="Seleção de Tipo"> | <img src="https://prnt.sc/VhJ-0b2imoMU/direct" width="250" alt="Geolocalização"> |
+| <img src="./img/1.png" width="250" alt="Tela Inicial"> | <img src="./img/2.png" width="250" alt="Seleção de Tipo"> | <img src="./img/3.png" width="250" alt="Geolocalização"> |
 | *Acesso via Gov.br ou Anônimo* | *Interface intuitiva para categorias* | *Mapa interativo e Uploads* |
 
-| **🤖 Chatbot IZA** | **🎫 Protocolo Gerado** | **♿ Menu de Acessibilidade** |
+| **🤖 Print 4** | **🎫 Print 5** | ** Print 6** |
 |:---:|:---:|:---:|
-| <img src="https://prnt.sc/rRl-1O1FtT4s/direct" width="250" alt="Chatbot IZA"> | <img src="https://prnt.sc/t9pjhoJuELeQ/direct" width="250" alt="Sucesso"> | <img src="https://prnt.sc/cDw_DZ-VKuMs/direct" width="250" alt="Acessibilidade"> |
+| <img src="./img/5.png" width="250" alt="Chatbot IZA"> | <img src="./img/4.png" width="250" alt="Sucesso"> | <img src="./img/6.png" width="250" alt="Acessibilidade"> |
 | *IA para triagem automática* | *Comprovante digital imediato* | *Alto contraste e Fontes* |
 
-> *Nota: As imagens acima demonstram a responsividade e o design mobile-first da aplicação.*
+</div>
+
+> *Nota: O layout é responsivo e adaptado para dispositivos móveis (Mobile-First).*
 
 ---
+
 
 ## 📹 Demonstração
 
